@@ -1,0 +1,6 @@
+{
+  "name": "Synora 2K26 — AIML Department Freshers' Fest | Kishkinda University",
+  "description": "Official freshers' fest website for Kishkinda University AIML Department (Batch of 2026–2030). Explore 13 activities, daytime schedule, event coordinators, and register via Google Forms.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

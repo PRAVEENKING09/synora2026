@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-canvas: #09090b;
+  --color-surface: #121216;
+  --color-surface-raised: #191920;
+  --color-amber-accent: #f5a623;
+  --color-amber-hover: #ffc04d;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-canvas);
+    color: #f4f4f5;
+    letter-spacing: 0.01em;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #f5a623;
+    outline-offset: 2px;
+  }
+}
+
+/* Hide scrollbars for horizontal filter navigation */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Luxury gold text shimmer */
+.text-gold-shimmer {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #fef08a 25%,
+    #f5a623 50%,
+    #ffffff 75%,
+    #ffc04d 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 8s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Subtle laser scanner animation for pass QR */
+@keyframes laser-sweep {
+  0% {
+    top: 0%;
+    opacity: 0.8;
+  }
+  50% {
+    top: 96%;
+    opacity: 0.9;
+  }
+  100% {
+    top: 0%;
+    opacity: 0.8;
+  }
+}
+
+.animate-laser {
+  animation: laser-sweep 2.8s ease-in-out infinite;
+}
+
+/* Floating ambient glow */
+@keyframes float-glow {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-15px) scale(1.08);
+    opacity: 0.65;
+  }
+}
+
+.animate-float-glow {
+  animation: float-glow 8s ease-in-out infinite;
+}
+
+/* Ticket semi-circular edge notches for perforated ticket */
+.ticket-notch-top {
+  position: absolute;
+  top: -12px;
+  width: 24px;
+  height: 24px;
+  background-color: #0c0c10;
+  border-radius: 9999px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 10;
+}
+
+.ticket-notch-bottom {
+  position: absolute;
+  bottom: -12px;
+  width: 24px;
+  height: 24px;
+  background-color: #0c0c10;
+  border-radius: 9999px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 10;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-laser,
+  .text-gold-shimmer,
+  .animate-float-glow {
+    animation: none !important;
+  }
+}
