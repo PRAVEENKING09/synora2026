@@ -105,6 +105,7 @@ export const EVENT_IMAGES = {
   dressCodeLookbook: '/src/assets/images/lookbook_daytime_ethnic.jpg',
   esportsGaming: '/src/assets/images/highlight_esports_gaming.jpg',
   creativeArts: '/src/assets/images/highlight_creative_arts.jpg',
+  sportsArena: '/src/assets/images/highlight_sports_arena.jpg',
 } as const;
 
 /**

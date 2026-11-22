@@ -92,8 +92,8 @@ export function HighlightsBento() {
             className="group relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-amber-500/40 bg-[#121216] min-h-[300px] sm:min-h-[360px] flex flex-col justify-end transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
           >
             <ResilientImage
-              src={EVENT_IMAGES.heroGala}
-              alt="Exciting sports and competitive arena at Kishkinda University"
+              src={EVENT_IMAGES.sportsArena}
+              alt="Exciting outdoor sports arena with box cricket and tug of war at Kishkinda University"
               fallbackTitle="02. Outdoor Sports Arenas"
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             />
