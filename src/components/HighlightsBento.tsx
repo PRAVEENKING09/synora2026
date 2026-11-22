@@ -124,8 +124,13 @@ export function HighlightsBento() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="group relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-amber-500/40 bg-[#121216] min-h-[300px] sm:min-h-[360px] flex flex-col justify-end transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-[#121216] to-amber-950/30" />
-            <div className="absolute top-6 right-6 w-24 h-24 rounded-full bg-cyan-500/10 blur-2xl pointer-events-none" />
+            <ResilientImage
+              src={EVENT_IMAGES.esportsGaming}
+              alt="Exciting esports gaming arena with neon-lit screens and competitive gamers"
+              fallbackTitle="03. Esports & Gaming Arena"
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090B]/95 via-[#09090B]/70 to-[#09090B]/10" />
 
             <div className="relative z-10 p-5 sm:p-6">
               <div className="flex items-center gap-2 text-xs text-zinc-300 font-mono mb-2">
@@ -153,7 +158,13 @@ export function HighlightsBento() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="lg:col-span-2 group relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-amber-500/40 bg-[#121216] min-h-[300px] sm:min-h-[360px] flex flex-col justify-end transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#09090B] via-[#16161C] to-amber-950/20" />
+            <ResilientImage
+              src={EVENT_IMAGES.creativeArts}
+              alt="Creative arts studio with cameras, paint palettes, and reel-making setup"
+              fallbackTitle="04. Creative Arts & Media"
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090B]/95 via-[#09090B]/70 to-[#09090B]/10" />
 
             <div className="relative z-10 p-5 sm:p-8 max-w-xl">
               <div className="flex items-center gap-2 text-xs text-zinc-300 font-mono mb-2">

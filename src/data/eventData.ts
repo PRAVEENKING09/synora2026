@@ -103,6 +103,8 @@ export const EVENT_IMAGES = {
   djAfterparty: '/src/assets/images/highlight_dj_afterparty_1795272547484.jpg',
   stageSpotlight: '/src/assets/images/highlight_stage_spotlight_1795272547185.jpg',
   dressCodeLookbook: '/src/assets/images/lookbook_daytime_ethnic.jpg',
+  esportsGaming: '/src/assets/images/highlight_esports_gaming.jpg',
+  creativeArts: '/src/assets/images/highlight_creative_arts.jpg',
 } as const;
 
 /**
