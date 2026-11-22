@@ -165,7 +165,20 @@ export function Navbar({ hasIssuedPass, config = EVENT_CONFIG }: NavbarProps) {
                 <a
                   key={link.href}
                   href={link.href}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setMobileOpen(false);
+                    const targetId = link.href.replace('#', '');
+                    // Small delay to let drawer close animation start before scrolling
+                    setTimeout(() => {
+                      const el = document.getElementById(targetId);
+                      if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        // Update URL hash without triggering hashchange navigation
+                        window.history.pushState(null, '', link.href);
+                      }
+                    }, 100);
+                  }}
                   className="px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/5 active:bg-white/10 transition-colors flex items-center justify-between"
                 >
                   <span>{link.label}</span>
@@ -177,7 +190,14 @@ export function Navbar({ hasIssuedPass, config = EVENT_CONFIG }: NavbarProps) {
             <div className="pt-2 border-t border-white/[0.08] flex flex-col gap-2">
               <a
                 href="#activities"
-                onClick={() => setMobileOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMobileOpen(false);
+                  setTimeout(() => {
+                    document.getElementById('activities')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    window.history.pushState(null, '', '#activities');
+                  }, 100);
+                }}
                 className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#F5A623] text-[#09090B] font-bold text-sm shadow-[0_0_15px_rgba(245,166,35,0.3)] text-center"
               >
                 <FileSpreadsheet className="w-4 h-4 text-[#09090B]" />
@@ -186,7 +206,14 @@ export function Navbar({ hasIssuedPass, config = EVENT_CONFIG }: NavbarProps) {
 
               <a
                 href="#rsvp"
-                onClick={() => setMobileOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMobileOpen(false);
+                  setTimeout(() => {
+                    document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    window.history.pushState(null, '', '#rsvp');
+                  }, 100);
+                }}
                 className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-white/5 border border-white/10 text-zinc-200 hover:text-white font-medium text-sm text-center"
               >
                 <Ticket className="w-4 h-4 text-[#F5A623]" />
