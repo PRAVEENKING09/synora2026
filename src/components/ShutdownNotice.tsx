@@ -80,7 +80,7 @@ export function ShutdownNotice({ config = EVENT_CONFIG }: ShutdownNoticeProps) {
 
           {/* Heading */}
           <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white mb-3">
-            Thanks for Visiting! <span className="inline-block animate-bounce">✨</span> <span className="inline-block">🙏</span> <span className="inline-block">🎉</span>
+            Thanks for Visiting! <span className="inline-block animate-bounce">✨</span>
           </h1>
 
           {/* Shutdown notification badge / pill */}
