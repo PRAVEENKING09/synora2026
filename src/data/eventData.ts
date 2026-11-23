@@ -84,7 +84,7 @@ export const EVENT_CONFIG: EventConfigType = {
   brandName: 'Synora 2K26',
   brandTagline: "AIML Department Freshers' Fest",
   collegeName: 'Kishkinda University',
-  department: 'Department of AI & Machine Learning',
+  department: 'AIML Department',
   batchLabel: 'Batch of 2026–2030 (26–30 Batch)',
   seniorsBatchLabel: 'Organized by 2nd Year Batch (2025–2029)',
   dateDisplay: 'Friday, Dec 4, 2026',

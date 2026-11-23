@@ -561,7 +561,7 @@ export function AdminPortal({
                     onChange={(e) =>
                       setConfigDraft((s) => ({ ...s, department: e.target.value }))
                     }
-                    placeholder="Department of AI & Machine Learning"
+                    placeholder="AIML Department"
                     required
                     className="w-full px-3.5 py-2.5 text-sm bg-[#16161C] border border-white/15 focus:border-[#F5A623] rounded-xl text-white focus:outline-none"
                   />

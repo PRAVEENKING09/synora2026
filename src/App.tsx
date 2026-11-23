@@ -84,6 +84,13 @@ export default function App() {
         ...loaded,
         brandName: 'Synora 2K26',
         brandTagline: "AIML Department Freshers' Fest",
+        department: 'AIML Department',
+      };
+    }
+    if (loaded.department && loaded.department.includes('AI & Machine Learning')) {
+      return {
+        ...loaded,
+        department: 'AIML Department',
       };
     }
     return loaded;

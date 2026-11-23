@@ -69,7 +69,7 @@ export function ShutdownNotice({ config = EVENT_CONFIG }: ShutdownNoticeProps) {
           </div>
 
           <p className="text-xs sm:text-sm text-zinc-400 font-medium">
-            {config.collegeName} · {config.department}
+            {config.collegeName} · AIML Department
           </p>
         </div>
 
