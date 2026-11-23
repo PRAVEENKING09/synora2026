@@ -90,7 +90,7 @@ export function ShutdownNotice({ config = EVENT_CONFIG }: ShutdownNoticeProps) {
           </div>
 
           <p className="text-sm sm:text-base text-zinc-300 leading-relaxed max-w-md mx-auto mb-6">
-            The Synora 2K26 celebration has officially wrapped up. A heartfelt thank you to all the 1st-year students (Batch 2026–2030), senior coordinators, and faculty who made it an incredible success!
+            The Synora 2K26 celebration has officially wrapped up. A heartfelt thank you to all the 1st-year students, senior coordinators, and faculty who made it an incredible success!
           </p>
 
           {/* Divider */}
@@ -146,10 +146,10 @@ export function ShutdownNotice({ config = EVENT_CONFIG }: ShutdownNoticeProps) {
             </div>
           </div>
 
-          {/* Batch badge */}
+          {/* Department badge */}
           <div className="mt-6 flex items-center justify-center gap-2 text-xs text-zinc-500 font-mono">
             <GraduationCap className="w-3.5 h-3.5 text-[#F5A623]" />
-            <span>AIML Department · Batch 2026–2030</span>
+            <span>AIML Department · Kishkinda University</span>
           </div>
         </div>
 
