@@ -65,7 +65,7 @@ export function ShutdownNotice({ config = EVENT_CONFIG }: ShutdownNoticeProps) {
 
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5A623]/10 border border-[#F5A623]/25 text-xs font-semibold text-[#F5A623] tracking-wide mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>SYNORA 2K26 · OFFICIAL NOTICE</span>
+            <span>SYNORA 2K26</span>
           </div>
 
           <p className="text-xs sm:text-sm text-zinc-400 font-medium">
@@ -84,26 +84,19 @@ export function ShutdownNotice({ config = EVENT_CONFIG }: ShutdownNoticeProps) {
           </h1>
 
           {/* Shutdown notification badge / pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs sm:text-sm font-semibold mb-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs sm:text-sm font-semibold mb-6">
             <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
             <span>The site has been Shutdown</span>
           </div>
-
-          <p className="text-sm sm:text-base text-zinc-300 leading-relaxed max-w-md mx-auto mb-6">
-            The Synora 2K26 celebration has officially wrapped up. A heartfelt thank you to all the 1st-year students, senior coordinators, and faculty who made it an incredible success!
-          </p>
-
-          {/* Divider */}
-          <div className="border-t border-white/[0.08] my-6" />
 
           {/* Contact & Support Section */}
           <div className="text-left bg-black/40 border border-white/[0.06] rounded-2xl p-4 sm:p-5">
             <div className="flex items-center gap-2 mb-2 text-xs font-semibold uppercase tracking-wider text-[#F5A623]">
               <Mail className="w-4 h-4" />
-              <span>Query &amp; Support Contact</span>
+              <span>Contact &amp; Support</span>
             </div>
             <p className="text-xs sm:text-sm text-zinc-400 mb-4">
-              For any queries, feedback, or coordinator support, feel free to reach out to us directly:
+              For any query or support, please contact us:
             </p>
 
             {/* Email display bar */}
