@@ -29,6 +29,7 @@ import { RsvpPassSection } from './components/RsvpPassSection';
 import { Footer } from './components/Footer';
 import { AmbientConstellation } from './components/AmbientConstellation';
 import { AdminPortal } from './components/AdminPortal';
+import { ShutdownNotice } from './components/ShutdownNotice';
 import { setupInspectProtection } from './utils/security';
 
 const STORAGE_KEYS = {
@@ -300,7 +301,22 @@ export default function App() {
   }
 
   // -------------------------------------------------------------
-  // STUDENT PORTAL (Open publicly with NO login wall)
+  // SHUTDOWN / CONCLUSION SCREEN
+  // Displayed to all visitors who open the site
+  // -------------------------------------------------------------
+  const showFullPortal = typeof window !== 'undefined' && window.location.hash.toLowerCase() === '#portal';
+
+  if (!showFullPortal) {
+    return (
+      <div className="relative min-h-screen bg-[#09090B] text-[#F4F4F5] flex flex-col selection:bg-[#F5A623] selection:text-[#09090B] overflow-x-hidden w-full">
+        <AmbientConstellation />
+        <ShutdownNotice config={eventConfig} />
+      </div>
+    );
+  }
+
+  // -------------------------------------------------------------
+  // STUDENT PORTAL (Archived view accessible via #portal if needed)
   // -------------------------------------------------------------
   return (
     <div className="relative min-h-screen bg-[#09090B] text-[#F4F4F5] flex flex-col selection:bg-[#F5A623] selection:text-[#09090B] overflow-x-hidden w-full">
