@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react';
-import { ArrowDownRight, Calendar, MapPin, Sparkles, FileSpreadsheet, Trophy, Users } from 'lucide-react';
-import { motion } from 'motion/react';
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  Calendar,
+  Clock,
+  MapPin,
+  Sparkles,
+  FileSpreadsheet,
+  Trophy,
+  Users,
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { EVENT_CONFIG, EVENT_IMAGES, type EventConfigType } from '../data/eventData';
 import { getCountdownParts, padTwo } from '../utils/partyLogic';
 import { ResilientImage } from './ResilientImage';
@@ -10,10 +20,48 @@ interface HeroSectionProps {
   config?: EventConfigType;
 }
 
+const HERO_PILLARS = [
+  {
+    id: 'activities',
+    label: '13 Activities',
+    icon: Trophy,
+    description: 'Sports, cultural stage, creative arts & esports built for freshers.',
+    ctaLabel: 'Explore Events',
+    href: '#activities',
+  },
+  {
+    id: 'schedule',
+    label: 'Rules & Timings',
+    icon: Clock,
+    description: 'Full 09:30 AM – 04:30 PM daytime schedule with rules & venues.',
+    ctaLabel: 'View Timeline',
+    href: '#schedule',
+  },
+  {
+    id: 'coordinators',
+    label: 'Coordinators',
+    icon: Users,
+    description: 'Connect directly with senior event leads via WhatsApp or call.',
+    ctaLabel: 'Meet Leads',
+    href: '#coordinators',
+  },
+  {
+    id: 'forms',
+    label: 'Google Forms',
+    icon: FileSpreadsheet,
+    description: 'Fast, free multi-event sign-up directly via the official form.',
+    ctaLabel: 'Register Free',
+    href: '#activities',
+  },
+] as const;
+
 export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectionProps) {
   const cfg = config ?? EVENT_CONFIG;
   const targetMs = new Date(cfg.eventStartIso).getTime();
   const [nowMs, setNowMs] = useState<number>(() => Date.now());
+  const [activePillarIdx, setActivePillarIdx] = useState<number>(0);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isPinned, setIsPinned] = useState<boolean>(false);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -22,7 +70,27 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
     return () => window.clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (isHovered || isPinned) return;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+
+    const timer = window.setInterval(() => {
+      setActivePillarIdx((prev) => (prev + 1) % HERO_PILLARS.length);
+    }, 3800);
+    return () => window.clearInterval(timer);
+  }, [isHovered, isPinned]);
+
   const countdown = getCountdownParts(targetMs, nowMs);
+  const activePillar = HERO_PILLARS[activePillarIdx];
+
+  const handleJumpToSection = (href: string) => {
+    const targetId = href.replace('#', '');
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.history.pushState(null, '', href);
+    }
+  };
 
   return (
     <section id="top" className="relative border-b border-white/[0.08] bg-[#09090B] overflow-hidden">
@@ -80,18 +148,107 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
                 </span>
               </motion.h1>
 
-              <motion.p
+              {/* Interactive Fest Highlights Deck (Replaces static paragraph) */}
+              <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
-                className="text-sm sm:text-base leading-relaxed text-zinc-300 max-w-lg"
+                className="space-y-3 max-w-lg"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
               >
-                A high-energy daytime celebration curated by seniors for the incoming{' '}
-                <span className="text-white font-medium">2026–2030 Batch</span> at the{' '}
-                <span className="text-[#F5A623] font-medium">{cfg.collegeName} {cfg.venueShort}</span>.
-                Explore all 13 activities, check rules &amp; timings, connect with senior
-                coordinators, and register directly via Google Forms!
-              </motion.p>
+                <div className="flex items-center gap-2.5 pl-3 border-l-2 border-[#F5A623] text-xs sm:text-sm text-zinc-300">
+                  <span>
+                    A high-energy daytime celebration curated by seniors for the{' '}
+                    <span className="text-white font-semibold">2026–2030 Batch</span> at{' '}
+                    <span className="text-[#F5A623] font-medium">
+                      {cfg.collegeName} {cfg.venueShort}
+                    </span>
+                    .
+                  </span>
+                </div>
+
+                <div className="rounded-2xl bg-[#121216]/90 border border-white/[0.08] p-2.5 sm:p-3 shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+                  {/* 2x2 Interactive Feature Selector */}
+                  <div
+                    role="tablist"
+                    aria-label="Fest highlights overview"
+                    className="grid grid-cols-2 gap-1.5"
+                  >
+                    {HERO_PILLARS.map((pillar, idx) => {
+                      const Icon = pillar.icon;
+                      const isActive = idx === activePillarIdx;
+                      return (
+                        <button
+                          key={pillar.id}
+                          id={`hero-tab-${pillar.id}`}
+                          type="button"
+                          role="tab"
+                          aria-selected={isActive}
+                          aria-controls="hero-highlight-panel"
+                          onClick={() => {
+                            setActivePillarIdx(idx);
+                            setIsPinned(true);
+                          }}
+                          className={`relative flex items-center gap-2 px-2.5 py-2 rounded-xl text-left text-xs font-medium transition-colors cursor-pointer z-10 ${
+                            isActive
+                              ? 'text-amber-200'
+                              : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03]'
+                          }`}
+                        >
+                          {isActive && (
+                            <motion.div
+                              layoutId="heroFeaturePill"
+                              transition={{ type: 'spring', bounce: 0.2, duration: 0.45 }}
+                              className="absolute inset-0 rounded-xl bg-[#F5A623]/15 border border-[#F5A623]/35 -z-10"
+                            />
+                          )}
+                          <Icon
+                            className={`w-3.5 h-3.5 shrink-0 transition-colors ${
+                              isActive ? 'text-[#F5A623]' : 'text-zinc-500'
+                            }`}
+                          />
+                          <span className="truncate font-semibold">{pillar.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Animated Active Highlight Detail + Quick Jump */}
+                  <div
+                    id="hero-highlight-panel"
+                    role="tabpanel"
+                    aria-labelledby={`hero-tab-${activePillar.id}`}
+                    className="mt-2.5 pt-2.5 border-t border-white/[0.06] px-1 min-h-[48px] flex items-center justify-between gap-3"
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activePillar.id}
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex items-center justify-between gap-2.5 w-full"
+                      >
+                        <p className="text-xs text-zinc-300 leading-snug">
+                          {activePillar.description}
+                        </p>
+                        <a
+                          href={activePillar.href}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleJumpToSection(activePillar.href);
+                          }}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white/[0.05] hover:bg-[#F5A623]/15 border border-white/10 hover:border-[#F5A623]/40 text-[11px] font-semibold text-[#F5A623] whitespace-nowrap shrink-0 transition-all group"
+                        >
+                          <span>{activePillar.ctaLabel}</span>
+                          <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        </a>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                </div>
+              </motion.div>
             </div>
 
             {/* CTAs: Google Form Register + Activities + Entry Pass */}
