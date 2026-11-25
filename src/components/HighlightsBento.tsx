@@ -29,7 +29,7 @@ export function HighlightsBento() {
           </div>
           <p className="text-xs sm:text-sm text-zinc-400 max-w-sm">
             From the spotlight stage in the main auditorium to the turf battlegrounds—every
-            segment is coordinated by AIML seniors for your unforgettable welcome.
+            segment is coordinated by AIML &amp; AIDS seniors for your unforgettable welcome.
           </p>
         </motion.div>
 

@@ -178,7 +178,7 @@ export function ActivitiesSection({
             </div>
             <div>
               <p className="text-sm font-semibold text-white">
-                All 1st-Year AIML Students (Batch 2026–2030) are Eligible!
+                All 1st-Year AIML &amp; AIDS Students (Batch 2026–2030) are Eligible!
               </p>
               <p className="text-xs text-zinc-300">
                 Participation certificates and championship trophies awarded during the
@@ -283,7 +283,7 @@ export function ActivitiesSection({
               const isRulesOpen = expandedRules[activity.id] ?? false;
               const cleanPhone = activity.contactNumber.replace(/\s+/g, '');
               const waMessage = encodeURIComponent(
-                `Hi ${activity.coordinatorName}, I am a 1st-year AIML student (Batch 2026–2030) at Kishkinda University. I'm inquiring about the "${activity.title}" event for Synora 2K26.`
+                `Hi ${activity.coordinatorName}, I am a 1st-year AIML / AIDS student (Batch 2026–2030) at Kishkinda University. I'm inquiring about the "${activity.title}" event for Synora 2K26.`
               );
               const waUrl = `https://wa.me/${activity.contactRaw}?text=${waMessage}`;
               const telUrl = `tel:+${activity.contactRaw}`;
@@ -444,7 +444,7 @@ export function ActivitiesSection({
                 <span>Coordinator Directory · Synora 2K26</span>
               </h3>
               <p className="text-xs sm:text-sm text-zinc-400">
-                Official coordinator contact list for all 13 activities (AIML Department, Kishkinda University)
+                Official coordinator contact list for all 13 activities (AIML &amp; AIDS, Kishkinda University)
               </p>
             </div>
             <button
@@ -494,7 +494,7 @@ export function ActivitiesSection({
                         </a>
                         <a
                           href={`https://wa.me/${act.contactRaw}?text=${encodeURIComponent(
-                            `Hi ${act.coordinatorName}, I am an AIML 1st year student inquiring about ${act.title}.`
+                            `Hi ${act.coordinatorName}, I am an AIML / AIDS 1st year student inquiring about ${act.title}.`
                           )}`}
                           target="_blank"
                           rel="noreferrer"
@@ -569,7 +569,7 @@ export function ActivitiesSection({
               )}
 
               <p className="text-xs sm:text-sm text-zinc-300 mt-4 leading-relaxed">
-                All 1st-year students from the AIML Department (Batch 2026–2030) must register
+                All 1st-year students from AIML &amp; AIDS (Batch 2026–2030) must register
                 for their chosen events using the official Google Form. You may participate in multiple
                 events as long as timings do not clash.
               </p>
@@ -578,7 +578,7 @@ export function ActivitiesSection({
               <div className="mt-4 p-3.5 rounded-xl bg-black/30 border border-white/[0.06] space-y-2 text-xs text-zinc-300">
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Enter your Full Name, Roll No. / USN, and AIML Section.</span>
+                  <span>Enter your Full Name, Roll No. / USN, Department (AIML / AIDS), and Section.</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />

@@ -82,9 +82,9 @@ export interface EventConfigType {
 
 export const EVENT_CONFIG: EventConfigType = {
   brandName: 'Synora 2K26',
-  brandTagline: "AIML Department Freshers' Fest",
+  brandTagline: "AIML & AIDS Freshers' Fest",
   collegeName: 'Kishkinda University',
-  department: 'AIML Department',
+  department: 'AIML & AIDS Department',
   batchLabel: 'Batch of 2026–2030 (26–30 Batch)',
   seniorsBatchLabel: 'Organized by 2nd Year Batch (2025–2029)',
   dateDisplay: 'Friday, Dec 4, 2026',
@@ -131,7 +131,7 @@ export const ACTIVITIES: ActivityItem[] = [
       '6 overs per match with standard box cricket turf rules.',
       '1 powerplay over per innings (max 2 fielders outside the inner circle).',
       'Direct wall hitting outside boundary marks constitutes an out.',
-      'All team members must belong to 1st Year AIML (Batch 2026–2030).',
+      'All team members must belong to 1st Year AIML & AIDS (Batch 2026–2030).',
     ],
   },
   {
@@ -357,7 +357,7 @@ export const ACTIVITIES: ActivityItem[] = [
     teamType: 'Solo / Pairs',
     tag: 'Brainpower',
     description:
-      'Logic riddles, rapid pattern decryption, mathematical paradoxes, and tech brainteasers designed to test sharp AIML minds.',
+      'Logic riddles, rapid pattern decryption, mathematical paradoxes, and tech brainteasers designed to test sharp AIML & AIDS minds.',
     rules: [
       'Round 1: Rapid-fire written puzzle paper (20 mins).',
       'Round 2: Live buzzer riddle round for top qualifying teams.',
@@ -398,8 +398,8 @@ export const SCHEDULE_ITEMS: ScheduleItem[] = [
     category: 'stage',
     categoryLabel: 'Stage',
     description:
-      'Welcome address by the Dean & HOD of AIML, ceremonial lamp lighting, student council opening remarks, and batch montage reveal.',
-    lead: 'AIML Faculty & Senior Student Council',
+      'Welcome address by the Dean & HOD of AIML & AIDS, ceremonial lamp lighting, student council opening remarks, and batch montage reveal.',
+    lead: 'AIML & AIDS Faculty & Senior Student Council',
   },
   {
     id: 'morning-sports',
@@ -459,7 +459,7 @@ export const SCHEDULE_ITEMS: ScheduleItem[] = [
     categoryLabel: 'Stage',
     description:
       'Distribution of trophies and certificates for all 13 activities, special recognitions, vote of thanks, and official 26–30 freshers batch photo.',
-    lead: 'AIML HOD & Core Organizing Committee (Batch 2025–2029)',
+    lead: 'AIML & AIDS HOD & Core Organizing Committee (Batch 2025–2029)',
   },
 ];
 
@@ -468,7 +468,7 @@ export const INITIAL_SONGS: SongRequest[] = [
     id: 'song-1',
     title: 'Tauba Tauba',
     artist: 'Karan Aujla',
-    requestedBy: 'AIML 1st Year',
+    requestedBy: 'AIML & AIDS 1st Year',
     votes: 38,
   },
   {
@@ -496,7 +496,7 @@ export const INITIAL_SONGS: SongRequest[] = [
     id: 'song-5',
     title: 'Believer',
     artist: 'Imagine Dragons',
-    requestedBy: 'AIML Section C',
+    requestedBy: 'AIDS Section A',
     votes: 18,
   },
 ];
@@ -512,7 +512,7 @@ export const INITIAL_TALENT_ENTRIES: TalentEntry[] = [
   {
     id: 'talent-2',
     name: 'Nageshwari P',
-    rollNumber: '26AIML045',
+    rollNumber: '26AIDS045',
     category: 'Solo / Duet Dance',
     pitch: 'High-octane classical contemporary fusion routine.',
   },
@@ -571,7 +571,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: 'faq-food',
     question: 'Is lunch provided for all freshers?',
     answer:
-      'Yes! A grand festive lunch feast with dedicated Vegetarian, Non-Vegetarian, and Jain food counters is organized for all registered 1st-year AIML students at 1:00 PM.',
+      'Yes! A grand festive lunch feast with dedicated Vegetarian, Non-Vegetarian, and Jain food counters is organized for all registered 1st-year AIML & AIDS students at 1:00 PM.',
   },
   {
     id: 'faq-multiple',

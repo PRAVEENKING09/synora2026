@@ -200,7 +200,7 @@ export function AdminPortal({
       teamType: 'Solo / Squad',
       tag: 'Exciting Challenge',
       description: 'Activity description for 1st-year freshers.',
-      rules: ['Standard rules apply.', '1st-year AIML students eligible.'],
+      rules: ['Standard rules apply.', '1st-year AIML & AIDS students eligible.'],
     };
     setEditingActivity(newAct);
     setIsNewActivityModal(true);
@@ -224,7 +224,7 @@ export function AdminPortal({
   const handleResetConfirm = () => {
     if (
       confirm(
-        'Are you sure you want to reset all dates, activities, and timings to the official AIML Department defaults?'
+        'Are you sure you want to reset all dates, activities, and timings to the official AIML & AIDS Department defaults?'
       )
     ) {
       onResetToDefaults();
@@ -281,7 +281,7 @@ export function AdminPortal({
           </div>
 
           <p className="text-xs text-zinc-400 mb-6 leading-relaxed">
-            Authorized administrative access for the AIML Department Organizing Committee
+            Authorized administrative access for the AIML &amp; AIDS Organizing Committee
             to modify event dates, activity timings, venues, and coordinator contact details.
           </p>
 
@@ -561,7 +561,7 @@ export function AdminPortal({
                     onChange={(e) =>
                       setConfigDraft((s) => ({ ...s, department: e.target.value }))
                     }
-                    placeholder="AIML Department"
+                    placeholder="AIML & AIDS Department"
                     required
                     className="w-full px-3.5 py-2.5 text-sm bg-[#16161C] border border-white/15 focus:border-[#F5A623] rounded-xl text-white focus:outline-none"
                   />

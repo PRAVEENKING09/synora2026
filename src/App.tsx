@@ -79,18 +79,27 @@ export default function App() {
   // Dynamic Editable Admin State (persisted to localStorage)
   const [eventConfig, setEventConfig] = useState<EventConfigType>(() => {
     const loaded = readStorage<EventConfigType>(STORAGE_KEYS.config, EVENT_CONFIG);
+    const needsDeptUpgrade =
+      !loaded.department ||
+      loaded.department === 'AIML Department' ||
+      loaded.department.includes('AI & Machine Learning');
+    const needsTaglineUpgrade =
+      !loaded.brandTagline ||
+      loaded.brandTagline === "AIML Department Freshers' Fest";
+
     if (!loaded.brandName || loaded.brandName.toLowerCase().includes('epoch')) {
       return {
         ...loaded,
         brandName: 'Synora 2K26',
-        brandTagline: "AIML Department Freshers' Fest",
-        department: 'AIML Department',
+        brandTagline: "AIML & AIDS Freshers' Fest",
+        department: 'AIML & AIDS Department',
       };
     }
-    if (loaded.department && loaded.department.includes('AI & Machine Learning')) {
+    if (needsDeptUpgrade || needsTaglineUpgrade) {
       return {
         ...loaded,
-        department: 'AIML Department',
+        ...(needsDeptUpgrade ? { department: 'AIML & AIDS Department' } : {}),
+        ...(needsTaglineUpgrade ? { brandTagline: "AIML & AIDS Freshers' Fest" } : {}),
       };
     }
     return loaded;
@@ -140,9 +149,9 @@ export default function App() {
   // Dynamically sync browser tab title with event branding
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.title = `${eventConfig.brandName} — AIML Department Freshers' Fest | ${eventConfig.collegeName}`;
+      document.title = `${eventConfig.brandName} — ${eventConfig.brandTagline} | ${eventConfig.collegeName}`;
     }
-  }, [eventConfig.brandName, eventConfig.collegeName]);
+  }, [eventConfig.brandName, eventConfig.brandTagline, eventConfig.collegeName]);
 
   // Sync admin state to localStorage
   useEffect(() => {

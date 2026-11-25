@@ -5,7 +5,7 @@ import { ACTIVITIES, COORDINATORS, EVENT_CONFIG } from '../data/eventData';
 test('Synora 2K26 event configuration has correct daytime metadata', () => {
   assert.equal(EVENT_CONFIG.brandName, 'Synora 2K26');
   assert.equal(EVENT_CONFIG.collegeName, 'Kishkinda University');
-  assert.equal(EVENT_CONFIG.department, 'Department of AI & Machine Learning');
+  assert.equal(EVENT_CONFIG.department, 'AIML & AIDS Department');
   assert.equal(EVENT_CONFIG.venueShort, 'Auditorium');
   assert.match(EVENT_CONFIG.batchLabel, /26–30|2026–2030/);
   // Ensure no night references exist in event config

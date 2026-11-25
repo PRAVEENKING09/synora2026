@@ -144,7 +144,7 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
               >
                 Welcome to <span className="text-gold-shimmer">{cfg.brandName}</span>
                 <span className="block text-xl sm:text-2xl lg:text-3xl font-medium text-zinc-300 mt-2 font-sans">
-                  AIML Department Freshers' Fest
+                  {cfg.brandTagline}
                 </span>
               </motion.h1>
 
@@ -159,8 +159,9 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
               >
                 <div className="flex items-center gap-2.5 pl-3 border-l-2 border-[#F5A623] text-xs sm:text-sm text-zinc-300">
                   <span>
-                    A high-energy daytime celebration curated by seniors for the{' '}
-                    <span className="text-white font-semibold">2026–2030 Batch</span> at{' '}
+                    A high-energy daytime celebration curated by seniors for{' '}
+                    <span className="text-white font-semibold">AIML &amp; AIDS 1st-Year Students</span>{' '}
+                    (2026–2030 Batch) at{' '}
                     <span className="text-[#F5A623] font-medium">
                       {cfg.collegeName} {cfg.venueShort}
                     </span>
@@ -293,7 +294,7 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
               </div>
               <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] text-center">
                 <span className="block text-base sm:text-lg font-bold text-amber-300 font-mono">26–30</span>
-                <span className="block text-[11px] text-zinc-400">1st Year Batch</span>
+                <span className="block text-[11px] text-zinc-400">AIML &amp; AIDS 1st Yr</span>
               </div>
               <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] text-center">
                 <span className="block text-base sm:text-lg font-bold text-emerald-400 font-mono">Daytime</span>
@@ -350,7 +351,7 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
             <div className="group relative w-full h-[260px] sm:h-[340px] lg:h-[400px] rounded-2xl overflow-hidden border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
               <ResilientImage
                 src={EVENT_IMAGES.heroGala}
-                alt="AIML Freshers Fest Celebration at Kishkinda University Auditorium"
+                alt="AIML and AIDS Freshers Fest Celebration at Kishkinda University Auditorium"
                 fallbackTitle="Synora 2K26 · Kishkinda University"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />

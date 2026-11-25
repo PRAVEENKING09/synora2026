@@ -86,7 +86,7 @@ export function downloadPassAsPng(
 
   ctx.fillStyle = '#D4D4D8';
   ctx.font = '500 17px monospace';
-  ctx.fillText(`${pass.rollNumber}  ·  ${pass.section}`, 64, 320);
+  ctx.fillText(`${pass.rollNumber}  ·  ${pass.branch ?? 'AIML'}  ·  ${pass.section}`, 64, 320);
 
   // Lower metadata row
   const drawField = (label: string, value: string, x: number, y: number) => {

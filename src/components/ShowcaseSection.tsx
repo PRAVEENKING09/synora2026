@@ -149,7 +149,7 @@ export function ShowcaseSection({
             <div className="group relative rounded-2xl overflow-hidden border border-white/[0.12] hover:border-amber-500/40 bg-[#121216] aspect-[4/3] sm:aspect-[3/4] max-h-[360px] sm:max-h-[420px] w-full mb-6 transition-all duration-500 shadow-[0_15px_35px_rgba(0,0,0,0.5)]">
               <ResilientImage
                 src={EVENT_IMAGES.dressCodeLookbook}
-                alt="AIML students in smart daytime festive and ethnic attire at Kishkinda University"
+                alt="AIML and AIDS students in smart daytime festive and ethnic attire at Kishkinda University"
                 fallbackTitle="Synora 2K26 Lookbook"
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
               />
@@ -456,7 +456,7 @@ export function ShowcaseSection({
                         type="text"
                         value={songRequester}
                         onChange={(e) => setSongRequester(e.target.value)}
-                        placeholder="e.g. Rahul · 26AIML034"
+                        placeholder="e.g. Rahul · 26AIML034 / 26AIDS018"
                         className="w-full px-3.5 py-2.5 text-base sm:text-sm bg-[#09090B] border border-white/15 rounded-lg text-white placeholder:text-zinc-500 focus:border-[#F5A623] transition-colors"
                       />
                     </div>
@@ -569,7 +569,7 @@ export function ShowcaseSection({
                         type="text"
                         value={talentRoll}
                         onChange={(e) => setTalentRoll(e.target.value)}
-                        placeholder="e.g. 25AIML012"
+                        placeholder="e.g. 26AIML012 / 26AIDS012"
                         className="w-full px-3.5 py-2.5 text-base sm:text-sm font-mono bg-[#09090B] border border-white/15 rounded-lg text-white placeholder:text-zinc-500 focus:border-[#F5A623] transition-colors"
                       />
                       {talentErrors.rollNumber && (
@@ -629,7 +629,7 @@ export function ShowcaseSection({
 
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 pt-1">
                     <span className="text-xs text-zinc-400 text-center sm:text-left">
-                      Open to 1st-year AIML students (Batch 2026–2030).
+                      Open to 1st-year AIML &amp; AIDS students (Batch 2026–2030).
                     </span>
                     <motion.button
                       type="submit"

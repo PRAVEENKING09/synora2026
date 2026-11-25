@@ -69,7 +69,7 @@ export function ShutdownNotice({ config = EVENT_CONFIG }: ShutdownNoticeProps) {
           </div>
 
           <p className="text-xs sm:text-sm text-zinc-400 font-medium">
-            {config.collegeName} · AIML Department
+            {config.collegeName} · AIML &amp; AIDS Department
           </p>
         </div>
 
@@ -142,7 +142,7 @@ export function ShutdownNotice({ config = EVENT_CONFIG }: ShutdownNoticeProps) {
           {/* Department badge */}
           <div className="mt-6 flex items-center justify-center gap-2 text-xs text-zinc-500 font-mono">
             <GraduationCap className="w-3.5 h-3.5 text-[#F5A623]" />
-            <span>AIML Department · Kishkinda University</span>
+            <span>AIML &amp; AIDS Department · Kishkinda University</span>
           </div>
         </div>
 
@@ -151,7 +151,7 @@ export function ShutdownNotice({ config = EVENT_CONFIG }: ShutdownNoticeProps) {
           <p className="flex items-center justify-center gap-1.5">
             <span>Crafted with</span>
             <Heart className="w-3 h-3 text-red-500 fill-red-500 inline" />
-            <span>by AIML Department · Kishkinda University</span>
+            <span>by AIML &amp; AIDS Department · Kishkinda University</span>
           </p>
           <p>© 2026 Synora 2K26. All rights reserved.</p>
         </footer>

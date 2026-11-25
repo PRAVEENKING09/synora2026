@@ -14,6 +14,7 @@ export interface CountdownParts {
   isLive: boolean;
 }
 
+export type StudentBranch = 'AIML' | 'AIDS';
 export type StudentSection = 'Section A' | 'Section B' | 'Section C' | 'Lateral Entry';
 export type DiningPreference = 'Vegetarian' | 'Non-Vegetarian' | 'Jain / Vegan';
 export type ParticipationTrack =
@@ -25,6 +26,7 @@ export interface RsvpFormInput {
   fullName: string;
   rollNumber: string;
   email: string;
+  branch?: StudentBranch;
   section: StudentSection;
   dining: DiningPreference;
   track: ParticipationTrack;
@@ -37,6 +39,7 @@ export interface RsvpValidationErrors {
 }
 
 export interface IssuedPass extends RsvpFormInput {
+  branch: StudentBranch;
   passCode: string;
   gate: string;
   diningCode: 'VEG' | 'NON-VEG' | 'JAIN';
@@ -97,7 +100,7 @@ export function validateRsvpForm(input: RsvpFormInput): RsvpValidationErrors {
   }
 
   if (!/^[A-Z0-9-]{4,16}$/.test(trimmedRoll)) {
-    errors.rollNumber = 'Enter a valid roll number (e.g. 26AIML042).';
+    errors.rollNumber = 'Enter a valid roll number (e.g. 26AIML042 or 26AIDS042).';
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmedEmail)) {
@@ -141,10 +144,13 @@ export function generatePassDetails(
     'Jain / Vegan': 'JAIN',
   };
 
+  const normalizedBranch: StudentBranch = input.branch === 'AIDS' ? 'AIDS' : 'AIML';
+
   return {
     fullName: normalizedName,
     rollNumber: normalizedRoll,
     email: normalizedEmail,
+    branch: normalizedBranch,
     section: input.section,
     dining: input.dining,
     track: input.track,
@@ -279,7 +285,7 @@ export function addSongRequest(
     id: createdId,
     title: input.title.trim(),
     artist: input.artist.trim(),
-    requestedBy: input.requestedBy.trim() || 'Fresher · AIML',
+    requestedBy: input.requestedBy.trim() || 'Fresher · AIML & AIDS',
     votes: 1,
   };
 
@@ -296,7 +302,7 @@ export function validateTalentSubmission(input: TalentFormInput): TalentValidati
     errors.name = 'Enter your name.';
   }
   if (!/^[A-Z0-9-]{4,16}$/.test(input.rollNumber.trim().toUpperCase())) {
-    errors.rollNumber = 'Enter your roll number (e.g. 26AIML042).';
+    errors.rollNumber = 'Enter your roll number (e.g. 26AIML042 or 26AIDS042).';
   }
   if (input.pitch.trim().length < 10) {
     errors.pitch = 'Describe your act or introduction in at least 10 characters.';

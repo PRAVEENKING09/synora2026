@@ -19,6 +19,7 @@ import {
   type ParticipationTrack,
   type RsvpFormInput,
   type RsvpValidationErrors,
+  type StudentBranch,
   type StudentSection,
 } from '../utils/partyLogic';
 import { downloadPassAsPng } from '../utils/passExport';
@@ -30,6 +31,11 @@ interface RsvpPassSectionProps {
   onResetPass: () => void;
   config?: EventConfigType;
 }
+
+const BRANCHES: { id: StudentBranch; label: string }[] = [
+  { id: 'AIML', label: 'AIML' },
+  { id: 'AIDS', label: 'AIDS' },
+];
 
 const SECTIONS: StudentSection[] = [
   'Section A',
@@ -61,6 +67,7 @@ export function RsvpPassSection({
     fullName: issuedPass?.fullName ?? '',
     rollNumber: issuedPass?.rollNumber ?? '',
     email: issuedPass?.email ?? '',
+    branch: issuedPass?.branch ?? 'AIML',
     section: issuedPass?.section ?? 'Section A',
     dining: issuedPass?.dining ?? 'Vegetarian',
     track: issuedPass?.track ?? 'General Entry',
@@ -99,10 +106,16 @@ export function RsvpPassSection({
 
   const previewPass: IssuedPass = useMemo(() => {
     if (issuedPass) return issuedPass;
+    const selectedBranch: StudentBranch = formState.branch === 'AIDS' ? 'AIDS' : 'AIML';
     const previewInput: RsvpFormInput = {
       fullName: formState.fullName.trim() || 'Your Name Here',
-      rollNumber: formState.rollNumber.trim().toUpperCase() || '26AIML000',
-      email: formState.email.trim() || 'fresher@aiml.edu',
+      rollNumber:
+        formState.rollNumber.trim().toUpperCase() ||
+        (selectedBranch === 'AIDS' ? '26AIDS000' : '26AIML000'),
+      email:
+        formState.email.trim() ||
+        (selectedBranch === 'AIDS' ? 'fresher@aids.edu' : 'fresher@aiml.edu'),
+      branch: selectedBranch,
       section: formState.section,
       dining: formState.dining,
       track: formState.track,
@@ -171,7 +184,7 @@ export function RsvpPassSection({
             <span className="text-gold-shimmer">digital pass.</span>
           </h2>
           <p className="text-xs sm:text-base text-zinc-400 leading-relaxed">
-            Entry is complimentary for all 1st-year AIML students ({cfg.batchLabel}) at {cfg.collegeName}. Complete
+            Entry is complimentary for all 1st-year AIML &amp; AIDS students ({cfg.batchLabel}) at {cfg.collegeName}. Complete
             your details to receive your Auditorium gate assignment, lunch counter code,
             and downloadable QR pass.
           </p>
@@ -229,7 +242,7 @@ export function RsvpPassSection({
                   onChange={(e) =>
                     setFormState((s) => ({ ...s, rollNumber: e.target.value }))
                   }
-                  placeholder="e.g. 25AIML042"
+                  placeholder="e.g. 26AIML042 / 26AIDS042"
                   aria-invalid={Boolean(errors.rollNumber)}
                   className="w-full px-3.5 py-2.5 text-base sm:text-sm font-mono bg-[#09090B] border border-white/15 rounded-lg text-white placeholder:text-zinc-500 focus:border-[#F5A623] transition-colors"
                 />
@@ -256,7 +269,7 @@ export function RsvpPassSection({
                 onChange={(e) =>
                   setFormState((s) => ({ ...s, email: e.target.value }))
                 }
-                placeholder="e.g. ananya.sharma@aiml.edu"
+                placeholder="e.g. ananya.sharma@kishkinda.edu"
                 aria-invalid={Boolean(errors.email)}
                 className="w-full px-3.5 py-2.5 text-base sm:text-sm bg-[#09090B] border border-white/15 rounded-lg text-white placeholder:text-zinc-500 focus:border-[#F5A623] transition-colors"
               />
@@ -266,6 +279,38 @@ export function RsvpPassSection({
                   <span>{errors.email}</span>
                 </p>
               )}
+            </div>
+
+            <div>
+              <span className="block text-xs font-medium text-zinc-300 mb-1.5">
+                Department (1st Year)
+              </span>
+              <div
+                role="group"
+                aria-label="Select Department"
+                className="grid grid-cols-2 gap-2"
+              >
+                {BRANCHES.map((branchOption) => {
+                  const isSelected = (formState.branch ?? 'AIML') === branchOption.id;
+                  return (
+                    <button
+                      key={branchOption.id}
+                      type="button"
+                      aria-pressed={isSelected}
+                      onClick={() =>
+                        setFormState((s) => ({ ...s, branch: branchOption.id }))
+                      }
+                      className={`py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#F5A623]/15 border-[#F5A623]/50 text-[#F5A623]'
+                          : 'bg-[#09090B] border-white/15 text-zinc-400 hover:text-white hover:border-white/30'
+                      }`}
+                    >
+                      {branchOption.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
@@ -447,7 +492,7 @@ export function RsvpPassSection({
                         {previewPass.fullName}
                       </div>
                       <div className="text-xs font-mono tabular-nums text-zinc-300 mt-1">
-                        {previewPass.rollNumber} · {previewPass.section}
+                        {previewPass.rollNumber} · {previewPass.branch} · {previewPass.section}
                       </div>
                     </div>
 

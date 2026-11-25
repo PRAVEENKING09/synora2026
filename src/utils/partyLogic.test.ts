@@ -82,8 +82,16 @@ test('generatePassDetails produces deterministic pass code, gate, and QR matrix'
   assert.equal(passA.passCode, passB.passCode);
   assert.match(passA.passCode, /^SYNORA26-[A-F0-9]{4}$/);
   assert.equal(passA.rollNumber, '26AIML042');
+  assert.equal(passA.branch, 'AIML');
   assert.equal(passA.gate, 'Auditorium Main Gate · South');
   assert.equal(passA.diningCode, 'JAIN');
+
+  const aidsPass = generatePassDetails(
+    { ...input, rollNumber: '26aids018', branch: 'AIDS' },
+    '2026-11-21T10:00:00.000Z'
+  );
+  assert.equal(aidsPass.rollNumber, '26AIDS018');
+  assert.equal(aidsPass.branch, 'AIDS');
 
   const qr1 = generateQrMatrix(passA.passCode, 17);
   const qr2 = generateQrMatrix(passB.passCode, 17);
