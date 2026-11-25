@@ -112,7 +112,7 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 flex flex-col justify-between gap-6 sm:gap-8"
+            className="lg:col-span-6 flex flex-col justify-between gap-6 sm:gap-8"
           >
             <div className="space-y-4 sm:space-y-6">
               <motion.div
@@ -139,11 +139,18 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
-                className="font-display font-semibold tracking-tight text-white leading-[1.08]"
-                style={{ fontSize: 'clamp(2.1rem, 6.4vw, 3.85rem)' }}
+                className="font-display tracking-tight text-white leading-[1.04]"
               >
-                Welcome to <span className="text-gold-shimmer">{cfg.brandName}</span>
-                <span className="block text-xl sm:text-2xl lg:text-3xl font-medium text-zinc-300 mt-2 font-sans">
+                <span className="block text-xl sm:text-2xl lg:text-3xl font-medium text-zinc-400 mb-1 font-sans">
+                  Welcome to
+                </span>
+                <span
+                  className="block font-black text-gold-shimmer filter drop-shadow-[0_4px_24px_rgba(245,166,35,0.35)]"
+                  style={{ fontSize: 'clamp(2.85rem, 8.5vw, 5.25rem)' }}
+                >
+                  {cfg.brandName}
+                </span>
+                <span className="block text-lg sm:text-xl lg:text-2xl font-semibold text-zinc-300 mt-2 font-sans tracking-tight">
                   {cfg.brandTagline}
                 </span>
               </motion.h1>
@@ -153,15 +160,15 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
-                className="space-y-3 max-w-lg"
+                className="space-y-3 max-w-xl"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
-                <div className="flex items-center gap-2.5 pl-3 border-l-2 border-[#F5A623] text-xs sm:text-sm text-zinc-300">
+                <div className="flex items-start gap-3 pl-3.5 border-l-2 border-[#F5A623] text-xs sm:text-sm text-zinc-300 leading-relaxed">
                   <span>
-                    A high-energy daytime celebration curated by seniors for{' '}
+                    Where ambition meets celebration — an electrifying daytime gala crafted with pride by seniors to welcome the incoming{' '}
                     <span className="text-white font-semibold">AIML &amp; AIDS 1st-Year Students</span>{' '}
-                    (2026–2030 Batch) at{' '}
+                    <span className="text-amber-300 font-mono text-[11px] sm:text-xs">({cfg.batchLabel})</span> at the{' '}
                     <span className="text-[#F5A623] font-medium">
                       {cfg.collegeName} {cfg.venueShort}
                     </span>
@@ -345,17 +352,17 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-7 flex flex-col justify-between gap-4"
+            className="lg:col-span-6 flex flex-col justify-between gap-4"
           >
             {/* Visual Marquee Hero Frame */}
-            <div className="group relative w-full h-[260px] sm:h-[340px] lg:h-[400px] rounded-2xl overflow-hidden border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div className="group relative w-full h-[320px] sm:h-[420px] lg:h-[480px] xl:h-[520px] rounded-2xl overflow-hidden border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
               <ResilientImage
                 src={EVENT_IMAGES.heroGala}
                 alt="AIML and AIDS Freshers Fest Celebration at Kishkinda University Auditorium"
                 fallbackTitle="Synora 2K26 · Kishkinda University"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090B] via-[#09090B]/40 to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090B] via-[#09090B]/30 to-transparent" />
 
               {/* Floating Live Badge */}
               <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs text-zinc-200">
@@ -382,37 +389,37 @@ export function HeroSection({ hasIssuedPass, config = EVENT_CONFIG }: HeroSectio
             </div>
 
             {/* Metadata Status Card */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 sm:p-5 rounded-2xl bg-[#121216] border border-white/[0.08]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 sm:p-4 rounded-2xl bg-[#121216] border border-white/[0.08]">
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center shrink-0">
-                  <Calendar className="w-4 h-4 text-[#F5A623]" />
+                <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center shrink-0">
+                  <Calendar className="w-3.5 h-3.5 text-[#F5A623]" />
                 </div>
-                <div>
-                  <span className="text-[11px] uppercase tracking-wider text-zinc-400 font-medium block">
+                <div className="min-w-0">
+                  <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-medium block">
                     Daytime Schedule
                   </span>
-                  <span className="text-sm font-semibold text-white block mt-0.5">
+                  <span className="text-xs sm:text-sm font-semibold text-white block mt-0.5 truncate">
                     {cfg.dateDisplay}
                   </span>
-                  <span className="text-xs font-mono text-amber-300 block">
+                  <span className="text-[11px] font-mono text-amber-300 block">
                     {cfg.timeDisplay}
                   </span>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center shrink-0">
-                  <MapPin className="w-4 h-4 text-[#F5A623]" />
+                <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center shrink-0">
+                  <MapPin className="w-3.5 h-3.5 text-[#F5A623]" />
                 </div>
-                <div>
-                  <span className="text-[11px] uppercase tracking-wider text-zinc-400 font-medium block">
+                <div className="min-w-0">
+                  <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-medium block">
                     Official Venue
                   </span>
-                  <span className="text-sm font-semibold text-white block mt-0.5">
+                  <span className="text-xs sm:text-sm font-semibold text-white block mt-0.5 truncate" title={cfg.venueFull}>
                     {cfg.venueFull}
                   </span>
-                  <span className="text-xs text-zinc-400 block">
-                    Auditorium &amp; Adjacent Sports Arena
+                  <span className="text-[11px] text-zinc-400 block truncate">
+                    Auditorium &amp; Arena
                   </span>
                 </div>
               </div>

@@ -24,16 +24,19 @@ import {
   Sparkles,
   FileSpreadsheet,
   X,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   EVENT_CONFIG,
   ACTIVITIES,
   SCHEDULE_ITEMS,
+  HIGHLIGHT_ITEMS,
   type ActivityItem,
   type ActivityCategory,
   type ScheduleItem,
   type ScheduleCategory,
+  type HighlightItem,
   type EventConfigType,
 } from '../data/eventData';
 import { verifyAdminCredentials } from '../utils/security';
@@ -42,9 +45,11 @@ export interface AdminPortalProps {
   config: EventConfigType;
   activities: ActivityItem[];
   scheduleItems: ScheduleItem[];
+  highlights?: HighlightItem[];
   onSaveConfig: (newConfig: EventConfigType) => void;
   onSaveActivities: (newActivities: ActivityItem[]) => void;
   onSaveSchedule: (newSchedule: ScheduleItem[]) => void;
+  onSaveHighlights?: (newHighlights: HighlightItem[]) => void;
   onResetToDefaults: () => void;
   onCloseAdmin: () => void;
 }
@@ -53,9 +58,11 @@ export function AdminPortal({
   config,
   activities,
   scheduleItems,
+  highlights = HIGHLIGHT_ITEMS,
   onSaveConfig,
   onSaveActivities,
   onSaveSchedule,
+  onSaveHighlights,
   onResetToDefaults,
   onCloseAdmin,
 }: AdminPortalProps) {
@@ -74,8 +81,8 @@ export function AdminPortal({
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Admin Dashboard Tabs: 'events' | 'activities' | 'schedule'
-  const [activeTab, setActiveTab] = useState<'events' | 'activities' | 'schedule'>('events');
+  // Admin Dashboard Tabs: 'events' | 'activities' | 'schedule' | 'highlights'
+  const [activeTab, setActiveTab] = useState<'events' | 'activities' | 'schedule' | 'highlights'>('events');
 
   // Form states for Event Config
   const [configDraft, setConfigDraft] = useState<EventConfigType>(config);
@@ -89,6 +96,11 @@ export function AdminPortal({
   const [scheduleDraft, setScheduleDraft] = useState<ScheduleItem[]>(scheduleItems);
   const [editingScheduleItem, setEditingScheduleItem] = useState<ScheduleItem | null>(null);
   const [isNewScheduleModal, setIsNewScheduleModal] = useState(false);
+
+  // Form states for Highlights & Photos
+  const [highlightsDraft, setHighlightsDraft] = useState<HighlightItem[]>(highlights);
+  const [editingHighlight, setEditingHighlight] = useState<HighlightItem | null>(null);
+  const [isNewHighlightModal, setIsNewHighlightModal] = useState(false);
 
   // Toast notification
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -258,17 +270,81 @@ export function AdminPortal({
     );
   };
 
+  // Delete a highlight photo card
+  const handleDeleteHighlight = (id: string, title: string) => {
+    if (confirm(`Are you sure you want to delete the photo highlight card "${title}"?`)) {
+      const next = highlightsDraft.filter((h) => h.id !== id);
+      setHighlightsDraft(next);
+      onSaveHighlights?.(next);
+      showToast(`Deleted highlight "${title}".`);
+    }
+  };
+
+  // Remove/clear photo from highlight card
+  const handleRemovePhotoFromHighlight = (id: string, title: string) => {
+    if (confirm(`Are you sure you want to remove the photo from "${title}"?`)) {
+      const next = highlightsDraft.map((h) =>
+        h.id === id ? { ...h, image: '' } : h
+      );
+      setHighlightsDraft(next);
+      onSaveHighlights?.(next);
+      showToast(`Removed photo from "${title}".`);
+    }
+  };
+
+  // Open add new highlight modal
+  const handleOpenNewHighlight = () => {
+    const newHl: HighlightItem = {
+      id: `hl-${Date.now()}`,
+      badge: 'Fest Spotlight',
+      badgeCategory: 'stage',
+      timeAndVenue: 'Main Auditorium',
+      title: 'New Fest Arena',
+      description: 'Signature celebration segment curated for freshers.',
+      image: '',
+      fallbackTitle: 'New Fest Arena',
+      colSpan: 1,
+    };
+    setEditingHighlight(newHl);
+    setIsNewHighlightModal(true);
+  };
+
+  // Save highlight edits/creation
+  const handleSaveHighlightModal = (e: FormEvent) => {
+    e.preventDefault();
+    if (!editingHighlight) return;
+
+    let next: HighlightItem[];
+    if (isNewHighlightModal) {
+      next = [...highlightsDraft, editingHighlight];
+    } else {
+      next = highlightsDraft.map((h) =>
+        h.id === editingHighlight.id ? editingHighlight : h
+      );
+    }
+    setHighlightsDraft(next);
+    onSaveHighlights?.(next);
+    setEditingHighlight(null);
+    setIsNewHighlightModal(false);
+    showToast(
+      isNewHighlightModal
+        ? `Created highlight photo card "${editingHighlight.title}".`
+        : `Updated highlight photo card "${editingHighlight.title}".`
+    );
+  };
+
   // Reset to original factory defaults
   const handleResetConfirm = () => {
     if (
       confirm(
-        'Are you sure you want to reset all dates, activities, and timings to the official AIML & AIDS Department defaults?'
+        'Are you sure you want to reset all dates, activities, timings, and highlights to the official AIML & AIDS Department defaults?'
       )
     ) {
       onResetToDefaults();
       setConfigDraft(EVENT_CONFIG);
       setActivitiesDraft(ACTIVITIES);
       setScheduleDraft(SCHEDULE_ITEMS);
+      setHighlightsDraft(HIGHLIGHT_ITEMS);
       showToast('All data has been reset to official department defaults.');
     }
   };
@@ -481,6 +557,18 @@ export function AdminPortal({
               }`}
             >
               3. Daytime Timeline ({scheduleDraft.length})
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('highlights')}
+              className={`px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+                activeTab === 'highlights'
+                  ? 'bg-[#F5A623] text-[#09090B]'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              4. Highlights &amp; Photos ({highlightsDraft.length})
             </button>
           </div>
 
@@ -777,25 +865,27 @@ export function AdminPortal({
                         </span>
                       </td>
                       <td className="py-3 px-4 text-right">
-                        <div className="inline-flex items-center gap-1.5 justify-end">
+                        <div className="inline-flex items-center gap-2 justify-end">
                           <button
                             type="button"
                             onClick={() => {
                               setEditingActivity({ ...act });
                               setIsNewActivityModal(false);
                             }}
-                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-200 hover:text-white transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-200 hover:text-white transition-colors cursor-pointer"
                             title="Edit Activity"
                           >
                             <Edit3 className="w-3.5 h-3.5 text-[#F5A623]" />
+                            <span>Edit</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDeleteActivity(act.id, act.title)}
-                            className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-xs font-semibold text-rose-400 hover:text-rose-300 transition-colors cursor-pointer"
                             title="Delete Activity"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
+                            <span>Delete</span>
                           </button>
                         </div>
                       </td>
@@ -886,6 +976,122 @@ export function AdminPortal({
                       <Trash2 className="w-3.5 h-3.5" />
                       <span>Remove</span>
                     </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* TAB 4: HIGHLIGHTS & PHOTOS BENTO MANAGER */}
+        {activeTab === 'highlights' && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 className="font-display text-xl font-bold text-white">
+                  Signature Highlights &amp; Photos ({highlightsDraft.length})
+                </h3>
+                <p className="text-xs sm:text-sm text-zinc-400">
+                  Manage signature fest arena cards and photos displayed on the main portal. Delete cards or remove photo images dynamically.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleOpenNewHighlight}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#F5A623] text-[#09090B] font-bold text-xs shadow-[0_0_15px_rgba(245,166,35,0.25)] hover:bg-[#FFC04D] transition-colors cursor-pointer shrink-0"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add New Photo Highlight</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {highlightsDraft.map((item) => (
+                <div
+                  key={item.id}
+                  className="rounded-2xl border border-white/10 bg-[#121216] overflow-hidden flex flex-col justify-between shadow-lg"
+                >
+                  <div className="relative h-48 bg-[#09090B] overflow-hidden border-b border-white/10 group">
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center gap-1.5 text-zinc-500 bg-black/40">
+                        <ImageIcon className="w-8 h-8 text-zinc-600" />
+                        <span className="text-xs font-medium">No Photo Image</span>
+                      </div>
+                    )}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#121216] via-transparent to-transparent" />
+                    <div className="absolute top-3 left-3 flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-black/70 backdrop-blur-md border border-white/10 text-amber-300">
+                        {item.badge}
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-black/70 backdrop-blur-md border border-white/10 text-zinc-300">
+                        {item.colSpan === 2 ? 'Wide (2-Col)' : 'Standard (1-Col)'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-4">
+                    <div>
+                      <h4 className="font-semibold text-sm sm:text-base text-white mb-1">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs font-mono text-[#F5A623] mb-2">
+                        {item.timeAndVenue}
+                      </p>
+                      <p className="text-xs text-zinc-400 line-clamp-3 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingHighlight({ ...item });
+                            setIsNewHighlightModal(false);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-zinc-200 hover:text-white transition-colors cursor-pointer"
+                        >
+                          <Edit3 className="w-3.5 h-3.5 text-[#F5A623]" />
+                          <span>Edit Card</span>
+                        </button>
+                        {item.image && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemovePhotoFromHighlight(item.id, item.title)}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-amber-500/15 border border-white/10 text-xs font-medium text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
+                            title="Remove the photo from this card"
+                          >
+                            <ImageIcon className="w-3.5 h-3.5" />
+                            <span>Remove Photo</span>
+                          </button>
+                        )}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteHighlight(item.id, item.title)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/25 text-xs font-semibold text-rose-400 hover:text-rose-300 transition-colors cursor-pointer"
+                        title="Delete this highlight card completely"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Delete Card</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -1118,20 +1324,42 @@ export function AdminPortal({
                   />
                 </div>
 
-                <div className="pt-2 flex items-center justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setEditingActivity(null)}
-                    className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-300"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-5 py-2 rounded-lg bg-[#F5A623] text-[#09090B] font-bold text-xs shadow-[0_0_15px_rgba(245,166,35,0.3)] hover:bg-[#FFC04D]"
-                  >
-                    Save Changes
-                  </button>
+                <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 mt-4">
+                  {!isNewActivityModal ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (editingActivity) {
+                          const { id, title } = editingActivity;
+                          handleDeleteActivity(id, title);
+                          setEditingActivity(null);
+                        }
+                      }}
+                      className="px-3.5 py-2 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-xs font-semibold text-rose-300 hover:text-rose-200 transition-colors flex items-center gap-1.5 cursor-pointer"
+                      title="Delete this activity completely"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Activity</span>
+                    </button>
+                  ) : (
+                    <div />
+                  )}
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setEditingActivity(null)}
+                      className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-300 cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2 rounded-lg bg-[#F5A623] text-[#09090B] font-bold text-xs shadow-[0_0_15px_rgba(245,166,35,0.3)] hover:bg-[#FFC04D] cursor-pointer"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
                 </div>
               </form>
             </motion.div>
@@ -1349,6 +1577,244 @@ export function AdminPortal({
                   >
                     {isNewScheduleModal ? 'Add Slot' : 'Update Slot'}
                   </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* EDIT / CREATE HIGHLIGHT MODAL */}
+      <AnimatePresence>
+        {editingHighlight && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
+            onClick={() => {
+              setEditingHighlight(null);
+              setIsNewHighlightModal(false);
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#16161C] p-6 shadow-2xl relative text-left my-8"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingHighlight(null);
+                  setIsNewHighlightModal(false);
+                }}
+                className="absolute right-4 top-4 text-zinc-400 hover:text-white p-1 rounded-lg cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <h4 className="font-display text-lg font-bold text-white mb-1">
+                {isNewHighlightModal ? 'Add New Photo Highlight' : 'Edit Highlight Photo Card'}
+              </h4>
+              <p className="text-xs text-amber-300 font-mono mb-4">
+                {isNewHighlightModal ? 'Configure card title, arena badge, and photo image' : editingHighlight.title}
+              </p>
+
+              <form onSubmit={handleSaveHighlightModal} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-medium text-zinc-300 mb-1">
+                    Arena / Card Title
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editingHighlight.title}
+                    onChange={(e) =>
+                      setEditingHighlight((s) => s && { ...s, title: e.target.value })
+                    }
+                    placeholder="e.g. 01. Grand Stage: Ramp Walk"
+                    className="w-full px-3 py-2 text-xs bg-black/40 border border-white/15 focus:border-[#F5A623] rounded-lg text-white"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-300 mb-1">
+                      Badge Text
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={editingHighlight.badge}
+                      onChange={(e) =>
+                        setEditingHighlight((s) => s && { ...s, badge: e.target.value })
+                      }
+                      placeholder="e.g. Main Stage"
+                      className="w-full px-3 py-2 text-xs bg-black/40 border border-white/15 focus:border-[#F5A623] rounded-lg text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-300 mb-1">
+                      Badge Category Icon
+                    </label>
+                    <select
+                      value={editingHighlight.badgeCategory}
+                      onChange={(e) =>
+                        setEditingHighlight(
+                          (s) =>
+                            s && {
+                              ...s,
+                              badgeCategory: e.target.value as 'stage' | 'sports' | 'gaming' | 'creative',
+                            }
+                        )
+                      }
+                      className="w-full px-3 py-2 text-xs bg-[#16161C] border border-white/15 focus:border-[#F5A623] rounded-lg text-white cursor-pointer"
+                    >
+                      <option value="stage">Stage (Trophy)</option>
+                      <option value="sports">Sports (Shield)</option>
+                      <option value="gaming">Gaming &amp; Intellect</option>
+                      <option value="creative">Creative Arts</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-300 mb-1">
+                      Timing &amp; Venue
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={editingHighlight.timeAndVenue}
+                      onChange={(e) =>
+                        setEditingHighlight((s) => s && { ...s, timeAndVenue: e.target.value })
+                      }
+                      placeholder="e.g. 10:15 AM · Turf Arena"
+                      className="w-full px-3 py-2 text-xs bg-black/40 border border-white/15 focus:border-[#F5A623] rounded-lg text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-300 mb-1">
+                      Card Width
+                    </label>
+                    <select
+                      value={editingHighlight.colSpan ?? 1}
+                      onChange={(e) =>
+                        setEditingHighlight(
+                          (s) =>
+                            s && {
+                              ...s,
+                              colSpan: Number(e.target.value) as 1 | 2,
+                            }
+                        )
+                      }
+                      className="w-full px-3 py-2 text-xs bg-[#16161C] border border-white/15 focus:border-[#F5A623] rounded-lg text-white cursor-pointer"
+                    >
+                      <option value={1}>Standard Card (1-Column)</option>
+                      <option value={2}>Wide Marquee Card (2-Columns)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-medium text-zinc-300">
+                      Photo Image URL / Path
+                    </label>
+                    {editingHighlight.image && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setEditingHighlight((s) => s && { ...s, image: '' })
+                        }
+                        className="text-[11px] text-rose-400 hover:text-rose-300 flex items-center gap-1 cursor-pointer"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        <span>Delete Photo Image</span>
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    value={editingHighlight.image}
+                    onChange={(e) =>
+                      setEditingHighlight((s) => s && { ...s, image: e.target.value })
+                    }
+                    placeholder="Enter image URL or leave empty for no photo"
+                    className="w-full px-3 py-2 text-xs bg-black/40 border border-white/15 focus:border-[#F5A623] rounded-lg text-white"
+                  />
+                  {editingHighlight.image && (
+                    <div className="mt-2 h-24 rounded-lg overflow-hidden border border-white/10 bg-black/50 relative">
+                      <img
+                        src={editingHighlight.image}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
+                      />
+                      <span className="absolute bottom-1 right-2 text-[10px] bg-black/70 px-2 py-0.5 rounded text-zinc-300">
+                        Photo Preview
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-zinc-300 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    rows={2}
+                    required
+                    value={editingHighlight.description}
+                    onChange={(e) =>
+                      setEditingHighlight((s) => s && { ...s, description: e.target.value })
+                    }
+                    className="w-full px-3 py-2 text-xs bg-black/40 border border-white/15 focus:border-[#F5A623] rounded-lg text-white"
+                  />
+                </div>
+
+                <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 mt-4">
+                  {!isNewHighlightModal ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (editingHighlight) {
+                          const { id, title } = editingHighlight;
+                          handleDeleteHighlight(id, title);
+                          setEditingHighlight(null);
+                        }
+                      }}
+                      className="px-3.5 py-2 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-xs font-semibold text-rose-300 hover:text-rose-200 transition-colors flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Card</span>
+                    </button>
+                  ) : (
+                    <div />
+                  )}
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingHighlight(null);
+                        setIsNewHighlightModal(false);
+                      }}
+                      className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-300 cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2 rounded-lg bg-[#F5A623] text-[#09090B] font-bold text-xs shadow-[0_0_15px_rgba(245,166,35,0.3)] hover:bg-[#FFC04D] cursor-pointer"
+                    >
+                      {isNewHighlightModal ? 'Create Highlight' : 'Save Changes'}
+                    </button>
+                  </div>
                 </div>
               </form>
             </motion.div>

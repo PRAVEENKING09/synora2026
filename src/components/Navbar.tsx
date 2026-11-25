@@ -30,8 +30,9 @@ export function Navbar({ hasIssuedPass, config = EVENT_CONFIG }: NavbarProps) {
   });
 
   return (
-    <header className="sticky top-0 z-40 bg-[#09090B]/90 backdrop-blur-md border-b border-white/[0.08] transition-all">
-      {/* Dynamic Gold Scroll Progress Bar */}
+    <>
+      <header className="fixed top-0 inset-x-0 z-50 bg-[#09090B]/95 backdrop-blur-md border-b border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all">
+        {/* Dynamic Gold Scroll Progress Bar */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#F5A623] via-[#FFC04D] to-amber-200 origin-left"
         style={{ scaleX }}
@@ -224,5 +225,9 @@ export function Navbar({ hasIssuedPass, config = EVENT_CONFIG }: NavbarProps) {
         )}
       </AnimatePresence>
     </header>
-  );
+
+    {/* Spacer so page content begins neatly beneath the fixed header */}
+    <div className="h-16 shrink-0" aria-hidden="true" />
+  </>
+);
 }

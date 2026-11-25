@@ -3,8 +3,10 @@ import {
   EVENT_CONFIG,
   ACTIVITIES,
   SCHEDULE_ITEMS,
+  HIGHLIGHT_ITEMS,
   type ActivityItem,
   type ScheduleItem,
+  type HighlightItem,
   type EventConfigType,
 } from './data/eventData';
 import { type IssuedPass } from './utils/partyLogic';
@@ -27,6 +29,7 @@ const STORAGE_KEYS = {
   config: 'synora26_event_config_v2',
   activities: 'synora26_activities_v1',
   schedule: 'synora26_schedule_v1',
+  highlights: 'synora26_highlights_v1',
 } as const;
 
 function readStorage<T>(key: string, fallback: T): T {
@@ -96,6 +99,9 @@ export default function App() {
   const [scheduleList, setScheduleList] = useState<ScheduleItem[]>(() =>
     readStorage<ScheduleItem[]>(STORAGE_KEYS.schedule, SCHEDULE_ITEMS)
   );
+  const [highlightsList, setHighlightsList] = useState<HighlightItem[]>(() =>
+    readStorage<HighlightItem[]>(STORAGE_KEYS.highlights, HIGHLIGHT_ITEMS)
+  );
 
   // Student State
   const [issuedPass, setIssuedPass] = useState<IssuedPass | null>(() =>
@@ -161,6 +167,17 @@ export default function App() {
     }
   }, [scheduleList]);
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEYS.highlights,
+        JSON.stringify(highlightsList)
+      );
+    } catch {
+      // Ignore quota errors
+    }
+  }, [highlightsList]);
+
   // Sync student pass & choices to localStorage
   useEffect(() => {
     try {
@@ -211,10 +228,12 @@ export default function App() {
     setEventConfig(EVENT_CONFIG);
     setActivitiesList(ACTIVITIES);
     setScheduleList(SCHEDULE_ITEMS);
+    setHighlightsList(HIGHLIGHT_ITEMS);
     try {
       window.localStorage.removeItem(STORAGE_KEYS.config);
       window.localStorage.removeItem(STORAGE_KEYS.activities);
       window.localStorage.removeItem(STORAGE_KEYS.schedule);
+      window.localStorage.removeItem(STORAGE_KEYS.highlights);
     } catch {
       // Ignore
     }
@@ -235,9 +254,11 @@ export default function App() {
         config={eventConfig}
         activities={activitiesList}
         scheduleItems={scheduleList}
+        highlights={highlightsList}
         onSaveConfig={setEventConfig}
         onSaveActivities={setActivitiesList}
         onSaveSchedule={setScheduleList}
+        onSaveHighlights={setHighlightsList}
         onResetToDefaults={handleResetToDefaults}
         onCloseAdmin={handleCloseAdmin}
       />
@@ -289,7 +310,7 @@ export default function App() {
         />
 
         {/* Daytime Highlights Bento */}
-        <HighlightsBento />
+        <HighlightsBento highlights={highlightsList} />
 
         {/* Daytime Schedule (09:30 AM to 04:30 PM) */}
         <ScheduleSection

@@ -35,6 +35,19 @@ export interface ActivityItem {
   tag: string;
 }
 
+export interface HighlightItem {
+  id: string;
+  badge: string;
+  badgeCategory: 'stage' | 'sports' | 'gaming' | 'creative';
+  timeAndVenue: string;
+  title: string;
+  description: string;
+  image: string;
+  fallbackTitle: string;
+  colSpan?: 1 | 2;
+  hasEqualizer?: boolean;
+}
+
 export interface SongRequest {
   id: string;
   title: string;
@@ -107,6 +120,58 @@ export const EVENT_IMAGES = {
   creativeArts: '/src/assets/images/highlight_creative_arts.jpg',
   sportsArena: '/src/assets/images/highlight_sports_arena.jpg',
 } as const;
+
+export const HIGHLIGHT_ITEMS: HighlightItem[] = [
+  {
+    id: 'hl-stage',
+    badge: 'Main Stage',
+    badgeCategory: 'stage',
+    timeAndVenue: '02:00 PM – 04:30 PM · Main Auditorium',
+    title: '01. Grand Stage: Ramp Walk & 3 Stage Showdown',
+    description:
+      'Step into the spotlight runway to compete for Mr. & Ms. Synora, showcase your theatrical mono act or dance routine, and battle in the high-stakes 3 Stage Showdown judged live by faculty and seniors.',
+    image: EVENT_IMAGES.stageSpotlight,
+    fallbackTitle: '01. Main Auditorium Stage',
+    colSpan: 2,
+    hasEqualizer: true,
+  },
+  {
+    id: 'hl-sports',
+    badge: 'Outdoor Arenas',
+    badgeCategory: 'sports',
+    timeAndVenue: '10:15 AM – 12:45 PM',
+    title: '02. Box Cricket & Tug of War',
+    description:
+      'Inter-section cricket thrills on the campus turf and adrenaline-fueled rope pulling on the central lawn. Rally your section squad for glory!',
+    image: EVENT_IMAGES.sportsArena,
+    fallbackTitle: '02. Outdoor Sports Arenas',
+    colSpan: 1,
+  },
+  {
+    id: 'hl-gaming',
+    badge: 'Esports & Intellect',
+    badgeCategory: 'gaming',
+    timeAndVenue: '10:30 AM',
+    title: '03. Free Fire, Mind Games & Hidden Chapters',
+    description:
+      'Custom room battle royale squad skirmishes, live logic buzzer rounds, and a campus-wide treasure hunt designed to test sharp algorithmic intellect.',
+    image: EVENT_IMAGES.esportsGaming,
+    fallbackTitle: '03. Esports & Gaming Arena',
+    colSpan: 1,
+  },
+  {
+    id: 'hl-creative',
+    badge: 'Creative & Fine Arts',
+    badgeCategory: 'creative',
+    timeAndVenue: 'All-Day Submissions · Auditorium Foyer',
+    title: '04. Photography, Reel Making & Painting',
+    description:
+      'Capture the lively daytime memories through candid photography, direct an aesthetic trending Instagram reel, or express your imagination on canvas. Trophies and recognition await the most creative minds!',
+    image: EVENT_IMAGES.creativeArts,
+    fallbackTitle: '04. Creative Arts & Media',
+    colSpan: 2,
+  },
+];
 
 /**
  * All 13 official activities for Synora 2K26 (AIML Department, Kishkinda University).
