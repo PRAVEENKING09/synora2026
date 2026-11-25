@@ -123,8 +123,8 @@ export function Footer({ config = EVENT_CONFIG, activities }: FooterProps) {
                   </a>
                 </li>
                 <li>
-                  <a href="#spotlight" className="hover:text-[#F5A623] transition-colors py-0.5 inline-block">
-                    Stage Playlist
+                  <a href="#venue" className="hover:text-[#F5A623] transition-colors py-0.5 inline-block">
+                    Venue &amp; FAQ
                   </a>
                 </li>
                 <li>

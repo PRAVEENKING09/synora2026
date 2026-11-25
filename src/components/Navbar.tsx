@@ -15,7 +15,7 @@ const NAV_LINKS = [
   { href: '#coordinators', label: 'Coordinators' },
   { href: '#schedule', label: 'Daytime Schedule' },
   { href: '#lineup', label: 'Highlights' },
-  { href: '#spotlight', label: 'Stage Queue' },
+  { href: '#dresscode', label: 'Dress Code' },
   { href: '#rsvp', label: 'Entry Pass' },
 ];
 

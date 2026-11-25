@@ -3,22 +3,11 @@ import {
   EVENT_CONFIG,
   ACTIVITIES,
   SCHEDULE_ITEMS,
-  INITIAL_SONGS,
-  INITIAL_TALENT_ENTRIES,
-  type SongRequest,
-  type TalentCategory,
-  type TalentEntry,
   type ActivityItem,
   type ScheduleItem,
   type EventConfigType,
 } from './data/eventData';
-import {
-  addSongRequest,
-  createTalentEntry,
-  sortSongsByVotes,
-  toggleSongVote,
-  type IssuedPass,
-} from './utils/partyLogic';
+import { type IssuedPass } from './utils/partyLogic';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { ActivitiesSection } from './components/ActivitiesSection';
@@ -35,9 +24,6 @@ import { setupInspectProtection } from './utils/security';
 const STORAGE_KEYS = {
   pass: 'synora26_issued_pass_v1',
   savedSchedule: 'synora26_saved_schedule_v1',
-  songs: 'synora26_songs_v1',
-  votedSongs: 'synora26_voted_songs_v1',
-  talent: 'synora26_talent_v1',
   config: 'synora26_event_config_v2',
   activities: 'synora26_activities_v1',
   schedule: 'synora26_schedule_v1',
@@ -117,15 +103,6 @@ export default function App() {
   );
   const [savedScheduleIds, setSavedScheduleIds] = useState<string[]>(() =>
     readStorage<string[]>(STORAGE_KEYS.savedSchedule, [])
-  );
-  const [songs, setSongs] = useState<SongRequest[]>(() =>
-    sortSongsByVotes(readStorage<SongRequest[]>(STORAGE_KEYS.songs, INITIAL_SONGS))
-  );
-  const [votedSongIds, setVotedSongIds] = useState<string[]>(() =>
-    readStorage<string[]>(STORAGE_KEYS.votedSongs, [])
-  );
-  const [talentEntries, setTalentEntries] = useState<TalentEntry[]>(() =>
-    readStorage<TalentEntry[]>(STORAGE_KEYS.talent, INITIAL_TALENT_ENTRIES)
   );
 
   // Listen to browser URL changes for secret admin@anosinx trigger
@@ -208,29 +185,6 @@ export default function App() {
     }
   }, [savedScheduleIds]);
 
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_KEYS.songs, JSON.stringify(songs));
-      window.localStorage.setItem(
-        STORAGE_KEYS.votedSongs,
-        JSON.stringify(votedSongIds)
-      );
-    } catch {
-      // Ignore storage quota errors
-    }
-  }, [songs, votedSongIds]);
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(
-        STORAGE_KEYS.talent,
-        JSON.stringify(talentEntries)
-      );
-    } catch {
-      // Ignore storage quota errors
-    }
-  }, [talentEntries]);
-
   const handleCloseAdmin = () => {
     setIsAdminOpen(false);
     if (typeof window !== 'undefined') {
@@ -272,32 +226,6 @@ export default function App() {
         ? prev.filter((id) => id !== itemId)
         : [...prev, itemId]
     );
-  };
-
-  const handleToggleSongVote = (songId: string) => {
-    const result = toggleSongVote(songs, votedSongIds, songId);
-    setSongs(result.songs);
-    setVotedSongIds(result.votedIds);
-  };
-
-  const handleAddSong = (title: string, artist: string, requestedBy: string) => {
-    const result = addSongRequest(songs, votedSongIds, {
-      title,
-      artist,
-      requestedBy,
-    });
-    setSongs(result.songs);
-    setVotedSongIds(result.votedIds);
-  };
-
-  const handleAddTalent = (input: {
-    name: string;
-    rollNumber: string;
-    category: TalentCategory;
-    pitch: string;
-  }) => {
-    const entry = createTalentEntry(input, talentEntries.length);
-    setTalentEntries((prev) => [entry, ...prev]);
   };
 
   // If Admin portal is requested, display dedicated Admin experience (with login protection)
@@ -371,15 +299,8 @@ export default function App() {
           config={eventConfig}
         />
 
-        {/* Stage Playlist Queue, Stage Signups, Dress Code Lookbook & FAQ */}
-        <ShowcaseSection
-          songs={songs}
-          votedSongIds={votedSongIds}
-          onToggleSongVote={handleToggleSongVote}
-          onAddSong={handleAddSong}
-          talentEntries={talentEntries}
-          onAddTalent={handleAddTalent}
-        />
+        {/* Dress Code Lookbook & Venue FAQ */}
+        <ShowcaseSection />
 
         {/* 3D Holographic Entry Pass Section */}
         <RsvpPassSection
