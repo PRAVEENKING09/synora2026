@@ -308,12 +308,11 @@ export default function App() {
   }
 
   // -------------------------------------------------------------
-  // SHUTDOWN / CONCLUSION SCREEN
-  // Displayed to all visitors who open the site
+  // SHUTDOWN SCREEN (Disabled by default - Main page is active)
   // -------------------------------------------------------------
-  const showFullPortal = typeof window !== 'undefined' && window.location.hash.toLowerCase() === '#portal';
+  const showShutdown = typeof window !== 'undefined' && window.location.hash.toLowerCase() === '#shutdown';
 
-  if (!showFullPortal) {
+  if (showShutdown) {
     return (
       <div className="relative min-h-screen bg-[#09090B] text-[#F4F4F5] flex flex-col selection:bg-[#F5A623] selection:text-[#09090B] overflow-x-hidden w-full">
         <AmbientConstellation />
@@ -323,7 +322,7 @@ export default function App() {
   }
 
   // -------------------------------------------------------------
-  // STUDENT PORTAL (Archived view accessible via #portal if needed)
+  // STUDENT PORTAL (Main Page)
   // -------------------------------------------------------------
   return (
     <div className="relative min-h-screen bg-[#09090B] text-[#F4F4F5] flex flex-col selection:bg-[#F5A623] selection:text-[#09090B] overflow-x-hidden w-full">
