@@ -88,6 +88,7 @@ export function AdminPortal({
   // Form states for Schedule
   const [scheduleDraft, setScheduleDraft] = useState<ScheduleItem[]>(scheduleItems);
   const [editingScheduleItem, setEditingScheduleItem] = useState<ScheduleItem | null>(null);
+  const [isNewScheduleModal, setIsNewScheduleModal] = useState(false);
 
   // Toast notification
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -206,18 +207,55 @@ export function AdminPortal({
     setIsNewActivityModal(true);
   };
 
+  // Delete a schedule item
+  const handleDeleteScheduleItem = (id: string, title: string) => {
+    if (confirm(`Are you sure you want to remove the timeline slot "${title}"?`)) {
+      const next = scheduleDraft.filter((item) => item.id !== id);
+      setScheduleDraft(next);
+      onSaveSchedule(next);
+      showToast(`Removed timeline slot "${title}".`);
+    }
+  };
+
+  // Open add new schedule slot modal
+  const handleOpenNewScheduleItem = () => {
+    const newItem: ScheduleItem = {
+      id: `sched-${Date.now()}`,
+      time: '16:30',
+      duration: '30 min',
+      title: 'New Fest Event',
+      location: 'Main Auditorium',
+      category: 'stage',
+      categoryLabel: 'Stage',
+      description: 'Session details and event description for students.',
+      lead: 'Senior Student Council',
+    };
+    setEditingScheduleItem(newItem);
+    setIsNewScheduleModal(true);
+  };
+
   // Save schedule item edits
   const handleSaveScheduleModal = (e: FormEvent) => {
     e.preventDefault();
     if (!editingScheduleItem) return;
 
-    const next = scheduleDraft.map((item) =>
-      item.id === editingScheduleItem.id ? editingScheduleItem : item
-    );
+    let next: ScheduleItem[];
+    if (isNewScheduleModal) {
+      next = [...scheduleDraft, editingScheduleItem];
+    } else {
+      next = scheduleDraft.map((item) =>
+        item.id === editingScheduleItem.id ? editingScheduleItem : item
+      );
+    }
     setScheduleDraft(next);
     onSaveSchedule(next);
     setEditingScheduleItem(null);
-    showToast(`Timeline item "${editingScheduleItem.title}" updated.`);
+    setIsNewScheduleModal(false);
+    showToast(
+      isNewScheduleModal
+        ? `Timeline slot "${editingScheduleItem.title}" added successfully.`
+        : `Timeline item "${editingScheduleItem.title}" updated.`
+    );
   };
 
   // Reset to original factory defaults
@@ -776,13 +814,24 @@ export function AdminPortal({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="mb-6">
-              <h3 className="font-display text-xl font-bold text-white">
-                Daytime Timeline Schedule ({scheduleDraft.length})
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-400">
-                Modify schedule times, session titles, locations, descriptions, and leads.
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 className="font-display text-xl font-bold text-white">
+                  Daytime Timeline Schedule ({scheduleDraft.length})
+                </h3>
+                <p className="text-xs sm:text-sm text-zinc-400">
+                  Modify schedule times, session titles, locations, descriptions, and leads.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleOpenNewScheduleItem}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#F5A623] text-[#09090B] font-bold text-xs shadow-[0_0_15px_rgba(245,166,35,0.25)] hover:bg-[#FFC04D] transition-colors cursor-pointer shrink-0"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add New Timeline Slot</span>
+              </button>
             </div>
 
             <div className="space-y-3">
@@ -816,14 +865,28 @@ export function AdminPortal({
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => setEditingScheduleItem({ ...item })}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-zinc-200 hover:text-white transition-colors cursor-pointer self-start md:self-center shrink-0"
-                  >
-                    <Edit3 className="w-3.5 h-3.5 text-[#F5A623]" />
-                    <span>Edit Timeline Slot</span>
-                  </button>
+                  <div className="flex items-center gap-2 self-start md:self-center shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingScheduleItem({ ...item });
+                        setIsNewScheduleModal(false);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-zinc-200 hover:text-white transition-colors cursor-pointer"
+                    >
+                      <Edit3 className="w-3.5 h-3.5 text-[#F5A623]" />
+                      <span>Edit Timeline Slot</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteScheduleItem(item.id, item.title)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 border border-white/10 hover:border-rose-500/30 text-xs font-semibold text-zinc-400 hover:text-rose-400 transition-colors cursor-pointer"
+                      title="Remove Timeline Slot"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Remove</span>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -1076,12 +1139,15 @@ export function AdminPortal({
         )}
       </AnimatePresence>
 
-      {/* EDIT SCHEDULE MODAL */}
+      {/* EDIT / CREATE SCHEDULE MODAL */}
       <AnimatePresence>
         {editingScheduleItem && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            onClick={() => setEditingScheduleItem(null)}
+            onClick={() => {
+              setEditingScheduleItem(null);
+              setIsNewScheduleModal(false);
+            }}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -1092,17 +1158,20 @@ export function AdminPortal({
             >
               <button
                 type="button"
-                onClick={() => setEditingScheduleItem(null)}
-                className="absolute right-4 top-4 text-zinc-400 hover:text-white p-1 rounded-lg"
+                onClick={() => {
+                  setEditingScheduleItem(null);
+                  setIsNewScheduleModal(false);
+                }}
+                className="absolute right-4 top-4 text-zinc-400 hover:text-white p-1 rounded-lg cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <h4 className="font-display text-lg font-bold text-white mb-1">
-                Edit Schedule Slot
+                {isNewScheduleModal ? 'Add New Timeline Slot' : 'Edit Schedule Slot'}
               </h4>
               <p className="text-xs text-amber-300 font-mono mb-4">
-                {editingScheduleItem.time} · {editingScheduleItem.title}
+                {isNewScheduleModal ? 'Create a new daytime schedule slot for the fest' : `${editingScheduleItem.time} · ${editingScheduleItem.title}`}
               </p>
 
               <form onSubmit={handleSaveScheduleModal} className="space-y-4">
@@ -1139,6 +1208,58 @@ export function AdminPortal({
                         )
                       }
                       placeholder="e.g. 45 min"
+                      className="w-full px-3 py-2 text-xs bg-black/40 border border-white/15 focus:border-[#F5A623] rounded-lg text-white"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-300 mb-1">
+                      Category
+                    </label>
+                    <select
+                      value={editingScheduleItem.category}
+                      onChange={(e) => {
+                        const cat = e.target.value as ScheduleCategory;
+                        const labelMap: Record<ScheduleCategory, string> = {
+                          stage: 'Stage',
+                          sports: 'Sports',
+                          creative: 'Creative',
+                          dining: 'Dining',
+                        };
+                        setEditingScheduleItem(
+                          (s) =>
+                            s && {
+                              ...s,
+                              category: cat,
+                              categoryLabel: labelMap[cat] || 'Stage',
+                            }
+                        );
+                      }}
+                      className="w-full px-3 py-2 text-xs bg-[#16161C] border border-white/15 focus:border-[#F5A623] rounded-lg text-white cursor-pointer"
+                    >
+                      <option value="stage">Stage</option>
+                      <option value="sports">Sports</option>
+                      <option value="creative">Creative</option>
+                      <option value="dining">Dining</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-300 mb-1">
+                      Category Badge
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={editingScheduleItem.categoryLabel}
+                      onChange={(e) =>
+                        setEditingScheduleItem(
+                          (s) => s && { ...s, categoryLabel: e.target.value }
+                        )
+                      }
+                      placeholder="e.g. Stage"
                       className="w-full px-3 py-2 text-xs bg-black/40 border border-white/15 focus:border-[#F5A623] rounded-lg text-white"
                     />
                   </div>
@@ -1214,16 +1335,19 @@ export function AdminPortal({
                 <div className="pt-2 flex items-center justify-end gap-2">
                   <button
                     type="button"
-                    onClick={() => setEditingScheduleItem(null)}
-                    className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-300"
+                    onClick={() => {
+                      setEditingScheduleItem(null);
+                      setIsNewScheduleModal(false);
+                    }}
+                    className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-300 cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-lg bg-[#F5A623] text-[#09090B] font-bold text-xs shadow-[0_0_15px_rgba(245,166,35,0.3)] hover:bg-[#FFC04D]"
+                    className="px-5 py-2 rounded-lg bg-[#F5A623] text-[#09090B] font-bold text-xs shadow-[0_0_15px_rgba(245,166,35,0.3)] hover:bg-[#FFC04D] cursor-pointer"
                   >
-                    Update Slot
+                    {isNewScheduleModal ? 'Add Slot' : 'Update Slot'}
                   </button>
                 </div>
               </form>
